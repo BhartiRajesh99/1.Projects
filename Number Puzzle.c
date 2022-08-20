@@ -18,26 +18,32 @@ int main()
     char name[20];
     int a[4][4],i;
     printf("\n\n\n");
+    printf("\e[1;96m");
     printf("\t\tPlayer Name: ");
     fgets(name,20,stdin);
+    printf("\e[0m");
     name[strlen(name)-1]='\0';
     system("cls");
-    printf("\t\tNUMBER PUZZLE\n");
-    printf("\n\t%6cRULES OF THIS GAME\n",' ');
-    printf("\n1.You can move only 1 step at a time by arrow key.\n");
+    printf("\t\t\e[1;95mNUMBER PUZZLE\e[0m\n");
+    printf("\n\t%6c\e[1;31mRULES OF THIS GAME\e[0m\n",' ');
+    printf("\n\e[0;36m1.You can move only 1 step at a time by arrow key.\e[0m\n");
     printf("\t%c Move Up    : by Up arrow key\n",26);
     printf("\t%c Move Down  : by Down arrow key\n",26);
     printf("\t%c Move Left  : by Left arrow key\n",26);
     printf("\t%c Move Right : by Right arrow key\n",26);
+    printf("\e[0;36m");
     printf("\n2.You can move number at empty position only.\n");
     printf("\n3.For each valid move : Your total number of move will decreased by 1.\n");
-    printf("\n4.Winning Situation : Number in a 4x4 matrix should be in order from 1 to 15.\n");
-    printf("\n\t\t%2cwinning situation:\n",' ');
+    printf("\n4.Winning Situation : Number in a 4x4 matrix should be in order from 1 to 15.\e[0m\n");
+    printf("\e[0m");
+    printf("\n\t\t%2c\e[0;32mwinning situation:\e[0m\n",' ');
+    printf("\e[0;35m");
     sample_pattern(a,4);  //winning situation pattern indicator
-    printf("\n5.You can exit the game at any time by pressing 'E' or 'e'.\n");
-    printf("\n%3c-->> So try to win in minimum number of moves\n",' ');
-    printf("\n\t%6cHappy Gaming,good luck!!\n",' ');
-    printf("\nEnter any key to start.....");
+    printf("\e[0m");
+    printf("\n\e[0;36m5.You can exit the game at any time by pressing 'E' or 'e'.\e[0m\n");
+    printf("\n%3c\e[0;36m-->>\e[0;33m So try to win in minimum number of moves\e[0m\n",' ');
+    printf("\n\t%6c\e[0;32mHappy Gaming,good luck!!\e[0m\n",' ');
+    printf("\n\e[0;34mEnter any key to start.....\e[0m");
     getch();
     system("cls");
     game(name);  //matrix game
@@ -48,6 +54,7 @@ int main()
 void pattern(int (*f)[4],int size6)
 {
     int i,j,s;
+    printf("\e[1;93m");
     for(i=1;i<=6;i++)
     {
         s=1;
@@ -73,7 +80,7 @@ void pattern(int (*f)[4],int size6)
                 if(f[i-2][j+3-4*s]==32)
                     printf("%c%4c",'|',' ');
                 else
-                    printf("%c%c%2d%c",'|',' ',f[i-2][j+3-4*s],' ');
+                    printf("%c%c\e[1;92m%2d\e[1;93m%c",'|',' ',f[i-2][j+3-4*s],' ');
                 s++;
             }
         }
@@ -91,12 +98,13 @@ void game(char *w)
         while(k>=1)
         {
             system("cls");
-            printf("\n\tPlayer name: %s , Move remaining: %d\n\n",w,k);
+            printf("\n\t\e[0;35mPlayer name:\e[0;33m %s\e[0;31m ,\e[0;32m Move remaining:\e[0;31m %d\e[0m\n\n",w,k);
             pattern(b,4);  //printing game matrix
             c=getch();
             if(c==224||c==0)
             {
                 i=getch();
+                printf("\e[1;93m");
                 switch(i)
                 {
                     case 72:
@@ -116,25 +124,29 @@ void game(char *w)
                             printf("\t\t%4cYou moved->Right",' ');
                             break;
                 }
+                printf("\e[0m");
                 win=winning(b,4);  //comparing current array with sorted array
                 if(win==1)
                     break;
                 k--;
             }
             else if(c=='e'||c=='E')
+            {
+                printf("\e[0m");
                 exit(0);
+            }
             else
-                printf("\n\tPlease play with arrow keys.\n\n");
+                printf("\n\t\e[1;93mPlease play with arrow keys.\e[0m\n\n");
         }
         if(win==0)
         {
             system("cls");
             pattern(b,4);
-            printf("\n\t\t%7cYOU LOSE!\n",' ');
-            printf("\n\t\t%2cWant to play again?\n",' ');
-            printf("\t\tEnter 'y' to play again:");
+            printf("\n\t\t%7c\e[1;91mYOU LOSE!\e[0m\n",' ');
+            printf("\n\t\t%2c\e[0;32mWant to play again?\n",' ');
+            printf("\t\t\e[0;33mEnter 'y' to play again:");
             d=getch();
-            printf("%c",d);
+            printf("%c\e[0m",d);
             if(d=='y'||d=='Y')
                 continue;
             else
@@ -144,13 +156,7 @@ void game(char *w)
         {
             system("cls");
             pattern(b,4);
-            printf("\t%4c",' ');
-            for(i=1;i<=29;i++)
-                printf("-");
-            printf("\n\n\t%6cCONGRATULATIONS, YOU WIN!\n\n",' ');
-            printf("\t%4c",' ');
-            for(i=1;i<=29;i++)
-                printf("-");
+            printf("\n\n\t%7c\e[1;94mCONGRATULATIONS, YOU WIN!\e[0m\n\n",' ');
             break;
         }
     }while(d);
