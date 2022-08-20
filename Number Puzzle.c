@@ -104,7 +104,7 @@ void game(char *w)
             if(c==224||c==0)
             {
                 i=getch();
-                printf("\e[1;93m");
+                printf("\e[1;96m\n");
                 switch(i)
                 {
                     case 72:
@@ -136,29 +136,22 @@ void game(char *w)
                 exit(0);
             }
             else
-                printf("\n\t\e[1;93mPlease play with arrow keys.\e[0m\n\n");
+                printf("\n\t\e[1;96mPlease play with arrow keys.\e[0m\n\n");
         }
+        system("cls");
+        pattern(b,4);
         if(win==0)
-        {
-            system("cls");
-            pattern(b,4);
             printf("\n\t\t%7c\e[1;91mYOU LOSE!\e[0m\n",' ');
-            printf("\n\t\t%2c\e[0;32mWant to play again?\n",' ');
-            printf("\t\t\e[0;33mEnter 'y' to play again:");
-            d=getch();
-            printf("%c\e[0m",d);
-            if(d=='y'||d=='Y')
-                continue;
-            else
-                break;
-        }
         else
-        {
-            system("cls");
-            pattern(b,4);
             printf("\n\n\t%7c\e[1;94mCONGRATULATIONS, YOU WIN!\e[0m\n\n",' ');
+        printf("\n\t\t%2c\e[0;32mWant to play again?\n",' ');
+        printf("\t\t\e[0;33mEnter 'y' to play again:");
+        d=getch();
+        printf("%c\e[0m",d);
+        if(d=='y'||d=='Y')
+            continue;
+        else
             break;
-        }
     }while(d);
 }
 void num_generator(int (*u)[4],int size5)
