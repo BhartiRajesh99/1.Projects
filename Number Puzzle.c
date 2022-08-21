@@ -17,6 +17,7 @@ int main()
 {
     char name[20];
     int a[4][4],i;
+    system("cls");
     printf("\n\n\n");
     printf("\e[1;96m");
     printf("\t\tPlayer Name: ");
