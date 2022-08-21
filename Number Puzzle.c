@@ -3,10 +3,10 @@
 #include<string.h>
 #include<stdlib.h>
 #include<time.h>
-void up_mover(int (*)[],int);
-void down_mover(int (*)[],int);
-void left_mover(int (*)[],int);
-void right_mover(int (*)[],int);
+int up_mover(int (*)[],int);
+int down_mover(int (*)[],int);
+int left_mover(int (*)[],int);
+int right_mover(int (*)[],int);
 void num_generator(int (*)[],int);
 int winning(int (*)[],int);
 void swap(int*,int*);
@@ -19,7 +19,7 @@ int main()
     int a[4][4],i;
     system("cls");
     printf("\n\n\n");
-    printf("\e[1;96m");
+    printf("\e[1;36m");
     printf("\t\tPlayer Name: ");
     fgets(name,20,stdin);
     printf("\e[0m");
@@ -37,7 +37,7 @@ int main()
     printf("\n3.For each valid move : Your total number of move will decreased by 1.\n");
     printf("\n4.Winning Situation : Number in a 4x4 matrix should be in order from 1 to 15.\e[0m\n");
     printf("\e[0m");
-    printf("\n\t\t%2c\e[0;32mwinning situation:\e[0m\n",' ');
+    printf("\n\t\t%2c\e[1;32mwinning situation:\e[0m\n",' ');
     printf("\e[0;35m");
     sample_pattern(a,4);  //winning situation pattern indicator
     printf("\e[0m");
@@ -90,14 +90,18 @@ void pattern(int (*f)[4],int size6)
 }
 void game(char *w)
 {
-    int k,win;
-    int c,d,b[4][4]={0},i;
+    int k,win,m,n,valid_move,flag;
+    int c,d,b[4][4]={0},y[4][4],i;
     do
     {
         k=400;
         num_generator(b,4);  //generate random numbers in array b
         while(k>=1)
         {
+            flag=0;
+            for(m=0;m<4;m++)
+                for(n=0;n<4;n++)
+                    y[m][n]=b[m][n];
             system("cls");
             printf("\n\t\e[0;35mPlayer name:\e[0;33m %s\e[0;31m ,\e[0;32m Move remaining:\e[0;31m %d\e[0m\n\n",w,k);
             pattern(b,4);  //printing game matrix
@@ -109,27 +113,44 @@ void game(char *w)
                 switch(i)
                 {
                     case 72:
-                            up_mover(b,4); //moving up function
-                            printf("\t\t%4cYou moved->Up",' ');
+                            valid_move=up_mover(b,4); //moving up function
+                            if(valid_move)
+                                printf("\t\t%4cYou moved->Up",' ');
+                            else
+                                printf("\t\tYour move is not valid");
                             break;
                     case 80:
-                            down_mover(b,4);  //moving down function
-                            printf("\t\t%4cYou moved->Down",' ');
+                            valid_move=down_mover(b,4);  //moving down function
+                            if(valid_move)
+                                printf("\t\t%4cYou moved->Down",' ');
+                            else
+                                printf("\t\tYour move is not valid");
                             break;
                     case 75:
-                            left_mover(b,4);  //moving left function
-                            printf("\t\t%4cYou moved->Left",' ');
+                            valid_move=left_mover(b,4);  //moving left function
+                            if(valid_move)
+                                printf("\t\t%4cYou moved->Left",' ');
+                            else
+                                printf("\t\tYour move is not valid");
                             break;
                     case 77:
-                            right_mover(b,4);  //moving right function
-                            printf("\t\t%4cYou moved->Right",' ');
+                            valid_move=right_mover(b,4);  //moving right function
+                            if(valid_move)
+                                printf("\t\t%4cYou moved->Right",' ');
+                            else
+                                printf("\t\tYour move is not valid");
                             break;
                 }
                 printf("\e[0m");
                 win=winning(b,4);  //comparing current array with sorted array
                 if(win==1)
                     break;
-                k--;
+                for(m=0;m<4;m++)
+                    for(n=0;n<4;n++)
+                        if(y[m][n]!=b[m][n])
+                            flag=1;
+                if(flag)
+                    k--;
             }
             else if(c=='e'||c=='E')
             {
@@ -188,123 +209,79 @@ void num_generator(int (*u)[4],int size5)
         }
     }
 }
-void up_mover(int (*p)[4],int size)
+int up_mover(int (*p)[4],int size)
 {
     int i,j,flag=0,n;
     for(i=0;i<size;i++)
     {
         for(j=0;j<size;j++)
-            if(i>=1)
+            if(i<=2)
             {
                 if(*(p[i]+j)==32)
                 {
                     flag=1;
-                    swap(&p[i][j],&p[i-1][j]);
-                    break;
+                    swap(&p[i][j],&p[i+1][j]);
+                    return flag;
                 }
             }
-            else
-            {
-                if(p[i][j]==32)
-                {
-                    flag=1;
-                    for(n=0;n<3;n++)
-                        swap(&p[n][j],&p[n+1][j]);
-                    break;
-                }
-            }
-        if(flag==1)
-            break;
     }
+    return flag;
 }
-void down_mover(int (*q)[4],int size1)
+int down_mover(int (*q)[4],int size1)
 {
     int i,j,flag=0,n;
-    for(i=0;i<size1;i++)
+    for(i=1;i<size1;i++)
     {
         for(j=0;j<size1;j++)
-            if(i<=2)
+            if(i>=1)
             {
                 if(*(q[i]+j)==32)
                 {
                     flag=1;
-                    swap(&q[i][j],&q[i+1][j]);
-                    break;
+                    swap(&q[i][j],&q[i-1][j]);
+                    return flag;
                 }
             }
-            else
-            {
-                if(q[i][j]==32)
-                {
-                    flag=1;
-                    for(n=3;n>0;n--)
-                        swap(&q[n][j],&q[n-1][j]);
-                    break;
-                }
-            }
-        if(flag==1)
-            break;
     }
+    return flag;
 }
-void left_mover(int (*r)[4],int size2)
+int left_mover(int (*r)[4],int size2)
 {
     int i,j,flag,n;
     for(i=0;i<size2;i++)
     {
         flag=0;
-        for(j=0;j<size2;j++)
-            if(j>=1)
+        for(j=0;j<size2-1;j++)
+            if(j<=2)
             {
                 if(*(r[i]+j)==32)
                 {
                     flag=1;
-                    swap(&r[i][j],&r[i][j-1]);
-                    break;
+                    swap(&r[i][j],&r[i][j+1]);
+                    return flag;
                 }
             }
-            else
-            {
-                if(*(r[i]+j)==32)
-                {
-                    flag=1;
-                    for(n=0;n<3;n++)
-                        swap(&r[i][n],&r[i][n+1]);
-                    break;
-                }
-            }
-        if(flag==1)
-            break;
     }
+    return flag;
 }
-void right_mover(int (*s)[4],int size3)
+int right_mover(int (*s)[4],int size3)
 {
     int i,j,flag,n;
     for(i=0;i<size3;i++)
     {
         flag=0;
-        for(j=0;j<size3;j++)
-            if(j<=2)
+        for(j=1;j<size3;j++)
+            if(j>=1)
             {
                 if(*(s[i]+j)==32)
                 {
                     flag=1;
-                    swap(&s[i][j],&s[i][j+1]);
-                    break;
+                    swap(&s[i][j],&s[i][j-1]);
+                   return flag;
                 }
             }
-            else
-            {
-                if(*(s[i]+j)==32)
-                {
-                    flag=1;
-                    for(n=3;n>0;n--)
-                        swap(&s[i][n],&s[i][n-1]);
-                    break;
-                }
-            }
-        if(flag==1)
-            break;
     }
+    return flag;
 }
 void swap(int *v,int *h)
 {
