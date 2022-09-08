@@ -66,7 +66,7 @@ int main()
             case 4:
                 exit(0);
             default:
-                printf("/nInvalid Choice\n");
+                printf("\nInvalid Choice\n");
         }
     }
     getch();
