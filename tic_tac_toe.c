@@ -36,7 +36,8 @@ int main()
         printf("Enter your choice: ");
         scanf("%d",&n);
         fflush(stdin);
-        system("cls");
+        if(n>=1&&n<=4)
+            system("cls");
         switch(n)
         {
             case 1:
@@ -66,7 +67,9 @@ int main()
             case 4:
                 exit(0);
             default:
-                printf("\nInvalid Choice\n");
+                printf("\n    Invalid Choice\n");
+                printf("Again enter your choice");
+                getch();
         }
     }
     getch();
